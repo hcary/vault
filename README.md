@@ -27,9 +27,29 @@ vault login $VAULT_TOKEN
 
 ### Enable Secrets Engine
 vault secrets enable -path=rc3labs kv-v2
+vault secrets enable -path=project1 kv-v2
+vault secrets enable -path=project2 kv-v2
+vault secrets enable -path=astra kv-v2
+vault secrets enable -path=nacd kv-v2
+vault secrets enable -path=vortex kv-v2
+
 
 vault kv put rc3labs/db/admin_passwd value='password'
 vault kv put rc3labs/db/admin_name value='dba_rc3labs@mydatabase.com'
 
 vault secrets list
 
+vault secrets enable -path=astra_db database
+
+vault write astra_db/config/Azure-MySQL \
+    plugin_name=mysql-database-plugin \
+    allowed_roles="astra_dba" \
+    connection_url="user:password@tcp(localhost:3306)/test" \
+    tls_certificate_key=@/path/to/client.pem \
+    tls_ca=@/path/to/client.ca
+
+vault write astra_db/roles/db-reader \
+    db_name=my-mysql-database \
+    creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';" \
+    default_ttl="1h" \
+    max_ttl="24h"
