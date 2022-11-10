@@ -1,0 +1,4 @@
+export BASE_DOMAIN=""
+export DOMAIN=""
+export VAULT_ADDR=""
+export VAULT_TOKEN=""

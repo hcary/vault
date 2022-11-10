@@ -1,0 +1,45 @@
+
+source ~/.private/vault.auth
+
+
+function vinit() {
+
+    echo vault operator init -key-shares=5 -key-threshold=3
+    echo
+    vault operator init -key-shares=5 -key-threshold=3 | tee ~/vault.info
+    source ~/hcvault-dynamic-db/set-env
+    export ROOT_TOKEN=$(cat ~/vault.info | grep Root | awk '{print $4}')
+    export VAULT_TOKEN=$VAULT_ROOT_TOKEN
+
+}
+
+function vstart() {
+
+    echo vault server -config $VAULT_BASE/config/config.hcl
+    echo  
+    vault server -config $VAULT_BASE/config/config.hcl 
+    # echo $! > vault.pid
+
+}
+
+function vquickunseal() {
+
+    # vkeys
+    echo ""
+    echo vault operator unseal
+    echo ""
+    vault operator unseal $(cat ~/.private/vault.info | grep Unseal | cut -f4 -d' '  | sed -n '1 p')
+    vault operator unseal $(cat ~/.private/vault.info | grep Unseal | cut -f4 -d' '  | sed -n '3 p')
+    vault operator unseal $(cat ~/.private/vault.info | grep Unseal | cut -f4 -d' '  | sed -n '5 p')
+
+
+}
+
+function start-vault() {
+
+    vault server -config vault-server.hcl -log-level=err >$VAULT_BASE/vault-debug.log 2>&1 &
+    echo $! > $VAULT_BASE/vault.pid
+
+    echo "tail -f ${VAULT_BASE}/vault-debug.log"
+
+}

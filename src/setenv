@@ -1,0 +1,7 @@
+export BASE_DOMAIN="rc3labs-int"
+export DOMAIN="int.rc3labs.com"
+export VAULT_ADDR="http://10.10.1.4:8200"
+export VAULT_TOKEN="s.NrOATfbaLcLCTPgxBi1h3a2e"
+
+
+export domain="int.rc3labs.com"

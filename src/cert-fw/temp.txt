@@ -1,0 +1,1 @@
+Review the top database account attacks, and how HashiCorp Vault Database Secrets Engine can help reduce your DB attack surface. and improve your database security.
